@@ -19,7 +19,7 @@ function AdminVideos() {
         page: page,
         limit: 10,
         order: null,
-        userID: currentUser?.id
+        userID: currentUser?._id
       }
       setloading(true)
       await getVideos(token, payload)

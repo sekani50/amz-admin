@@ -20,7 +20,7 @@ function UserManagement() {
     const payload = {
       page: page,
       limit: 10,
-      userID: currentUser?.id
+      userID: currentUser?._id
     }
     async function fetchVideo() {
       setloading(true);

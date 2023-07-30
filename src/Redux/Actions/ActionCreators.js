@@ -60,9 +60,18 @@ const LoginAction = (loginParams, navigate, setLoading) => {
       .catch((error) => {
         setLoading(false);
         console.log(error);
-        toast.error(error.message);
-        const { message } = error.response.data.response;
+        if (
+          error.message === "Network Error" ||
+          error.message === "timeout exceeded"
+        ) {
+          toast.error("Network Error");
+        }
+        console.log(error.response.data);
+        const { message } = error.response.data.error;
         toast.error(message);
+        //console.log(error.response.data.error.message);
+        const { message: mm } = error.response.data.response;
+        toast.error(mm);
       });
   };
 };
@@ -88,10 +97,18 @@ const registration = (registrationParams, navigate, setLoading) => {
       })
       .catch((error) => {
         setLoading(false);
-        toast.error(error.message);
-        //console.log(error.response.data.error.message);
-        const { message } = error.response.data.response;
+        if (
+          error.message === "Network Error" ||
+          error.message === "timeout exceeded"
+        ) {
+          toast.error("Network Error");
+        }
+        console.log(error.response.data);
+        const { message } = error.response.data.error;
         toast.error(message);
+        //console.log(error.response.data.error.message);
+        const { message: mm } = error.response.data.response;
+        toast.error(mm);
       });
   };
 };
