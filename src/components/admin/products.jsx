@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { AiOutlinePlayCircle } from "react-icons/ai";
 import RecordWidget from "../recordwidget/recordWidget";
 import Container from "../admincontainer/container";
-import { useDispatch } from "react-redux";
 import { getProducts } from "../../Utils/api";
 import { useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
+import { LoaderIcon } from "lucide-react";
+import empty from "../../assets/png/emptyorder.png";
 
 function AdminProducts() {
   const { token, currentUser } = useSelector((state) => state.user);
@@ -13,7 +13,7 @@ function AdminProducts() {
   const [data, setdata] = useState([]);
   const [totalItems, setTotalItems] = useState();
   const [loading, setloading] = useState(false);
-  const dispatch = useDispatch();
+
   useEffect(() => {
     const payload = {
       page: page,
@@ -39,7 +39,6 @@ function AdminProducts() {
           setloading(false);
           console.log(err);
           console.log(err.response.data?.error?.message);
-          
         });
     }
 
@@ -57,28 +56,78 @@ function AdminProducts() {
                 <AiOutlinePlayCircle className="text-[#005ABC] text-[25px]" />
                 <span>Name</span>
               </div>
-              <div>Views</div>
-              <div className="col-span-2">Date</div>
+              <div className="">Total Ordered</div>
+              <div className="">Total Shipped</div>
+              <div>Price</div>
               <div>Commission</div>
-              <div>Sales</div>
-              <div>Status</div>
+              <div>Revenue</div>
             </div>
+            {loading && (
+              <div className="w-full items-center justify-center flex h-[300px]">
+                <div className="justify-center flex w-fit h-fit items-center">
+                  <LoaderIcon className="w-10 animate-spin text-[#005ABC]" />
+                </div>
+              </div>
+            )}
+            {!loading && data?.length === 0 && (
+              <div className="w-full h-[300px] flex justify-center items-center">
+                <span className="w-[200px] h-[200px]">
+                  <img className="w-full h-full" src={empty} alt="" />
+                </span>
+              </div>
+            )}
 
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((v) => (
-              <RecordWidget
-                key={v}
-                image={""}
-                name={"Apple air pod"}
-                views={"100"}
-                active={""}
-                commission={"1000"}
-                sales={"1000"}
-                tab={"Products"}
-              />
-            ))}
+            {!loading &&
+              data.length > 0 &&
+              data?.map(
+                (
+                  {
+                    name,
+                    price,
+                    image,
+                    revenue,
+                    commission_income,
+                    total_ordered,
+                    items_shipped,
+                  },
+                  idx
+                ) => (
+                  <RecordWidget
+                    key={idx}
+                    image={image || ""}
+                    name={name}
+                    shipped={items_shipped}
+                    ordered={total_ordered}
+                    price={price}
+                    commission={commission_income}
+                    sales={revenue}
+                  />
+                )
+              )}
           </div>
         </div>
       </div>
+      {totalItems && (
+        <div className="mt-8 w-full">
+          <div className="flex justify-center space-x-1 items-center">
+            {totalItems?.map((pagenumber, idx) => {
+              return (
+                <button
+                  onClick={() => {
+                    setPage(pagenumber);
+                  }}
+                  key={idx}
+                  className={`hover:bg-foreground text-white hover:text-background w-fit rounded-lg h-[30px] px-3 ${
+                    page === pagenumber ? "bg-pink-600" : "bg-[#0449a4]"
+                  }`}
+                >
+                  {pagenumber}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </Container>
   );
 }

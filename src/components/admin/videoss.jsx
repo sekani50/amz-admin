@@ -1,53 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlinePlayCircle } from "react-icons/ai";
-import RecordWidget from "../recordwidget/recordWidget";
 import Container from "../admincontainer/container";
 import { getVideos } from "../../Utils/api";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { LoaderIcon } from "lucide-react";
+import empty from "../../assets/png/emptyorder.png";
+import RecordWidgetB from "../recordwidget/recordWidgetb";
 
 function AdminVideos() {
-  const [data, setdata] = useState([])
-  const [totalItems, setTotalItems] = useState(null)
-  const [page, setPage] = useState(1)
-  const dispatch = useDispatch()
-  const {token, currentUser} = useSelector((state) => state.user)
-  const [loading, setloading] = useState(false)
+  const [data, setdata] = useState([]);
+  const [totalItems, setTotalItems] = useState(null);
+  const [page, setPage] = useState(1);
+  const { token, currentUser } = useSelector((state) => state.user);
+  const [loading, setloading] = useState(false);
   useEffect(() => {
-    async function fetchVideos () {
+    async function fetchVideos() {
       const payload = {
         page: page,
         limit: 10,
         order: null,
-        userID: currentUser?._id
-      }
-      setloading(true)
+        userID: currentUser?._id,
+      };
+      setloading(true);
       await getVideos(token, payload)
-      .then((res) => {
-        console.log(res.data);
-        setloading(false);
-        const { items, totalItems } = res.data;
-        setdata(items);
-        const totalPage = Math.ceil(totalItems / 10);
-        const pageNumbers = [...Array(totalPage).keys()].map(
-          (page) => page + 1
-        );
+        .then((res) => {
+          console.log(res.data);
+          setloading(false);
+          const { items, totalItems } = res.data;
+          setdata(items);
+          const totalPage = Math.ceil(totalItems / 10);
+          const pageNumbers = [...Array(totalPage).keys()].map(
+            (page) => page + 1
+          );
 
-        setTotalItems(pageNumbers);
-      })
-      .catch((err) => {
-        setloading(false);
-        console.log(err);
-        console.log(err.response.data?.response)
-        console.log(err.response.data?.error?.message)
-       
-      
-      });
+          setTotalItems(pageNumbers);
+        })
+        .catch((err) => {
+          setloading(false);
+          console.log(err);
+          console.log(err.response.data?.response);
+          console.log(err.response.data?.error?.message);
+        });
     }
 
-    fetchVideos()
+    fetchVideos();
     //eslint-disable-next-line
-  },[page])
+  }, [page]);
 
   return (
     <Container>
@@ -57,30 +55,79 @@ function AdminVideos() {
             <div className="w-full items-center bg-white px-3 py-3 sm:py-5 grid grid-cols-9 gap-2 text-gray-500">
               <div className="flex space-x-2 items-center col-span-3">
                 <AiOutlinePlayCircle className="text-[#005ABC] text-[25px]" />
-                <span>Name</span>
+                <span>Title</span>
               </div>
-              <div>Views</div>
-              <div className="col-span-2">Date</div>
-              <div>Commission</div>
-              <div>Sales</div>
+              <div className="col-span-2">Average Views</div>
+              <div className="col-span-2">Avg. View Duraton</div>
               <div>Status</div>
+              <div>Video Link</div>
             </div>
+            {loading && (
+              <div className="w-full items-center justify-center flex h-[300px]">
+                <div className="justify-center flex w-fit h-fit items-center">
+                  <LoaderIcon className="w-10 animate-spin text-[#005ABC]" />
+                </div>
+              </div>
+            )}
+            {!loading && data?.length === 0 && (
+              <div className="w-full h-[300px] flex justify-center items-center">
+                <span className="w-[200px] h-[200px]">
+                  <img className="w-full h-full" src={empty} alt="" />
+                </span>
+              </div>
+            )}
 
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((v) => (
-              <RecordWidget
-                key={v}
-                image={""}
-                name={"How to make money online"}
-                views={"100"}
-                active={''}
-                commission={"1000"}
-                sales={"1000"}
-                tab={"Videos"}
-              />
-            ))}
+            {!loading &&
+              data.length > 0 &&
+              data?.map(
+                (
+                  {
+                    title,
+                    image,
+                    avg_percent_view,
+                    avg_view_duration,
+                    status,
+                    video,
+                    id,
+                  },
+                  idx
+                ) => (
+                  <RecordWidgetB
+                    key={idx}
+                    image={image}
+                    id={id}
+                    name={title}
+                    video={video}
+                    avgView={avg_percent_view}
+                    avgViewtime={avg_view_duration}
+                    status={status}
+                  />
+                )
+              )}
           </div>
         </div>
       </div>
+      {totalItems && (
+        <div className="mt-8 w-full">
+          <div className="flex justify-center space-x-1 items-center">
+            {totalItems?.map((pagenumber, idx) => {
+              return (
+                <button
+                  onClick={() => {
+                    setPage(pagenumber);
+                  }}
+                  key={idx}
+                  className={`hover:bg-foreground text-white hover:text-background w-fit rounded-lg h-[30px] px-3 ${
+                    page === pagenumber ? "bg-pink-600" : "bg-[#0449a4]"
+                  }`}
+                >
+                  {pagenumber}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </Container>
   );
 }

@@ -1,6 +1,5 @@
 import React from "react";
-import profile from "../../assets/png/customerpic.png";
-import { useNavigate } from "react-router-dom";
+import profile from "../../assets/png/products.jpg";
 const RecordWidget = ({
   image,
   name,
@@ -8,16 +7,12 @@ const RecordWidget = ({
   shipped,
   price,
   commission,
-  
   sales,
 }) => {
-  const navigate = useNavigate();
+ 
   return (
     <div className="bg-white space-y-2 sm:space-y-3 w-full">
       <div
-        onClick={() => {
-          navigate("/product/1");
-        }}
         className="w-full items-center  px-3 py-3 grid grid-cols-9 gap-2 border border-gray-300 rounded-sm"
       >
         <div className="grid grid-cols-6 items-center col-span-3">
@@ -29,16 +24,16 @@ const RecordWidget = ({
             />
           </div>
           <div className="col-span-5 whitespace-nowrap text-ellipsis w-[190px] overflow-hidden ">
-            {name}
+            {name || 'nil'}
           </div>
          
         </div>
-        <div className="">{ordered}</div>
-          <div className="">{shipped}</div>
-        <div>{price}</div>
+        <div className="">{ordered || '0'}</div>
+          <div className="">{shipped || '0'}</div>
+        <div>{price || '$0'}</div>
        
-        <div>{`$${commission?.toLocaleString()}`}</div>
-        <div>{`${sales?.toLocaleString()}`}</div>
+        <div>{`${commission?.toLocaleString()}` || '$0'}</div>
+        <div>{`${sales?.toLocaleString()}` || '$0'}</div>
         
       </div>
     </div>
