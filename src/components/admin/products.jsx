@@ -52,7 +52,7 @@ function AdminProducts() {
 
   return (
     <Container>
-      <div className="relative w-full h-full px-2  sm:px-6 bg-white pt-4 sm:pt-16">
+      <div className="relative w-full h-fit px-2  sm:px-6 bg-gray-50 pt-4 sm:pt-16">
       <div
         onClick={() => {
           navigate(-1);
