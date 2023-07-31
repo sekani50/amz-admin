@@ -6,15 +6,17 @@ import { getProducts } from "../../Utils/api";
 import { useSelector } from "react-redux";
 import { LoaderIcon } from "lucide-react";
 import empty from "../../assets/png/emptyorder.png";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { MdNavigateBefore } from "react-icons/md";
 
 function AdminProducts() {
   const {id} = useParams()
-  const { token, currentUser } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
   const [page, setPage] = useState(1);
   const [data, setdata] = useState([]);
   const [totalItems, setTotalItems] = useState();
   const [loading, setloading] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const payload = {
@@ -50,7 +52,16 @@ function AdminProducts() {
 
   return (
     <Container>
-      <div className="w-full h-full px-2  sm:px-6 bg-white pt-4 sm:pt-16">
+      <div className="relative w-full h-full px-2  sm:px-6 bg-white pt-4 sm:pt-16">
+      <div
+        onClick={() => {
+          navigate(-1);
+        }}
+        className="absolute top-3 left-3 cursor-pointer w-fit h-fit flex space-x-2 items-center"
+      >
+        <MdNavigateBefore className="text-[22px]" />
+        Back
+      </div>
         <div className="dashboard-scroll-style w-full h-fit overflow-x-auto">
           <div className="w-full min-w-[1000px] space-y-3">
             <div className="w-full items-center bg-white px-3 py-3 sm:py-5 grid grid-cols-9 gap-2 text-gray-500">
