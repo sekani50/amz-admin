@@ -78,7 +78,7 @@ const App = () => {
             }
           />
           <Route
-            path="/videos"
+            path="/videos/:id"
             element={
               <RequireAuth link={"/"}>
                 <AdminVideos />
@@ -86,7 +86,7 @@ const App = () => {
             }
           />
           <Route
-            path="/products"
+            path="/products/:id"
             element={
               <RequireAuth link={"/"}>
                 <AdminProducts />

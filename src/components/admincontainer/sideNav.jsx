@@ -85,7 +85,7 @@ const SideNav = ({ isNav, setisNav }) => {
             <AiOutlineUser className="text-[25px] " />
             <span>User Management</span>
           </Link>
-          <Link
+         {/* <Link
             to="/products"
             className={` flex space-x-3 justify-start items-center font-medium px-3 my-2 py-2 ${
               pathname === "/products"
@@ -109,7 +109,7 @@ const SideNav = ({ isNav, setisNav }) => {
               <CiVideoOn className="text-[25px]" />
             </div>
             <span>Videos</span>
-          </Link>
+          </Link>*/}
 
           <Link
             to="/setting"

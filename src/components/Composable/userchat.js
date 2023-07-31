@@ -12,8 +12,8 @@ const UserChart = () => {
       await getVideoMetric(token)
       .then((res) => {
         console.log(res)
-        const { users} = res.data
-        setUsers(users)
+        const { user_metric} = res.data
+        setUsers(user_metric)
         //console.log(users)
        
        
@@ -61,12 +61,12 @@ const UserChart = () => {
 
   ];
   return (
-    <div>
+    <div className="w-full">
       <Chart
         options={options}
         series={series}
         type="area"
-        width="50%"
+        width="100%"
         height="320"
       />
     </div>

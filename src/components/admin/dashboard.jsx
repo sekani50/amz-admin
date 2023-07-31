@@ -13,17 +13,19 @@ function AdminDashboard() {
   const {token} = useSelector((state) => state.user)
   const [videos, setVideos] = useState('')
   const [users, setUsers] = useState('')
+  const [data, setdata] = useState('')
   
   useEffect(() => {
     async function fetchMetric() {
       await getVideoMetric(token)
       .then((res) => {
         console.log(res)
-        const {videos, users} = res.data
-        setVideos(videos)
-        const totalArray = users.map((val) => val.total)
-        const total  = totalArray.reduce((acc,curr) => acc+curr,0)
-        setUsers(total)
+        setdata(res.data)
+        
+        //setVideos(videos)
+       // const totalArray = users.map((val) => val.total)
+        //const total  = totalArray.reduce((acc,curr) => acc+curr,0)
+        //setUsers(total)
       })
       .catch((err) => {
         console.log(err)
@@ -32,15 +34,19 @@ function AdminDashboard() {
     }
     fetchMetric()
      // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  
   },[])
   return (
     <Container>
       <div className="w-full h-fit px-2  sm:px-6 bg-white pt-4 sm:pt-16">
         <div className=" mb-10 grid lg:grid-cols-4 md:grid-cols-3  sm:grid-cols-2 gap-10">
-          <Inventories title="Total Sales" subtitle="$2,456" />
-          <Inventories title="Total Users" subtitle={users} />
-          <Inventories title="Total videos" subtitle={videos} />
-          <Inventories title="Total products" subtitle="456" />
+          <Inventories title="Expired Subscriptions" subtitle={data?.expired_subscriptions} />
+          <Inventories title="Active Subscriptions" subtitle={data?.active_subscriptions} />
+          <Inventories title="Total Videos" subtitle={data?.videos} />
+          <Inventories title="Total Products" subtitle={data?.products} />
+          <Inventories title="Total Users" subtitle={data?.users} />
+          <Inventories title="Sales on Subscriptions" subtitle={data?.sales_on_subscriptions} />
         </div>
 
         <div className="font-bold text-gray-800 text-xl">User Report</div>

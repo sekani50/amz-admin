@@ -5,7 +5,7 @@ import avatar from "../../assets/png/customerpic.png";
 import empty from "../../assets/png/emptyorder.png"
 import { LoaderIcon } from "lucide-react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { getUsers } from "../../Utils/api";
 function UserManagement() {
@@ -16,13 +16,14 @@ function UserManagement() {
   const [totalItems, setTotalItems] = useState();
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   useEffect(() => {
     const payload = {
       page: page,
       limit: 10,
       userID: currentUser?._id
     }
-    async function fetchVideo() {
+    async function fetchUsers() {
       setloading(true);
       await getUsers(token, payload)
         .then((res) => {
@@ -49,7 +50,7 @@ function UserManagement() {
         });
     }
 
-    fetchVideo();
+    fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   
@@ -77,11 +78,25 @@ function UserManagement() {
               <img className="w-full h-full" src={empty} alt="" />
             </span>
           </div>)}
-          {!loading && data.length > 0 && data?.map(({id,status, role, avatar:pic,subscription, first_name, last_name,}, i) => (
-            <Link
-              to={''}
+          {!loading && data.length > 0 && data?.map(({id,status,email, role, avatar:pic,subscription, first_name, last_name,}, i) => (
+            <div
+              onClick={() => {
+                navigate(`/user/${id}`, {
+                  state: {
+                    id,
+                    image:pic,
+                    subscription,
+                    first_name,
+                    last_name, 
+                    role,
+                    status,
+                    email
+
+                  }
+                })
+              }}
               key={i}
-              className="grid grid-cols-12 gap-5 border-y py-4 items-center"
+              className="cursor-pointer grid grid-cols-12 gap-5 border-y py-4 items-center"
             >
               <div className="col-span-4 flex space-x-2 items-center">
                 <div className="w-[45px] h-[45px]">
@@ -131,7 +146,7 @@ function UserManagement() {
                   </div>
                 )}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </Container>

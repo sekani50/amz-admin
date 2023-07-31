@@ -10,8 +10,8 @@ const CircularChart = () => {
       await getVideoMetric(token)
       .then((res) => {
         console.log(res)
-        const { users} = res.data
-        setUsers(users)
+        const { user_metric} = res.data
+        setUsers(user_metric)
         //console.log(users)
        
        

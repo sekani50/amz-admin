@@ -6,8 +6,10 @@ import { useSelector } from "react-redux";
 import { LoaderIcon } from "lucide-react";
 import empty from "../../assets/png/emptyorder.png";
 import RecordWidgetB from "../recordwidget/recordWidgetb";
+import { useParams } from "react-router-dom";
 
 function AdminVideos() {
+  const {id} = useParams()
   const [data, setdata] = useState([]);
   const [totalItems, setTotalItems] = useState(null);
   const [page, setPage] = useState(1);
@@ -19,7 +21,7 @@ function AdminVideos() {
         page: page,
         limit: 10,
         order: null,
-        userID: currentUser?._id,
+        userID: id,
       };
       setloading(true);
       await getVideos(token, payload)

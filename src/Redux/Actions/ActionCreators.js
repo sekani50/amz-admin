@@ -67,11 +67,18 @@ const LoginAction = (loginParams, navigate, setLoading) => {
           toast.error("Network Error");
         }
         console.log(error.response.data);
+        const {error:err} = error.response.data
+        if(err) {
+          toast.error(err.message)
+        }
         const { message } = error.response.data.error;
-        toast.error(message);
-        //console.log(error.response.data.error.message);
+        if (message) {
+          toast.error(message);
+        }
         const { message: mm } = error.response.data.response;
-        toast.error(mm);
+        if (mm) {
+          toast.error(mm);
+        }
       });
   };
 };
@@ -103,12 +110,18 @@ const registration = (registrationParams, navigate, setLoading) => {
         ) {
           toast.error("Network Error");
         }
-        console.log(error.response.data);
+        const {error:err} = error.response.data
+        if(err) {
+          toast.error(Object.values(err))
+        }
         const { message } = error.response.data.error;
-        toast.error(message);
-        //console.log(error.response.data.error.message);
+        if (message) {
+          toast.error(message);
+        }
         const { message: mm } = error.response.data.response;
-        toast.error(mm);
+        if (mm) {
+          toast.error(mm);
+        }
       });
   };
 };

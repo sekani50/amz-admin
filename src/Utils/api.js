@@ -57,7 +57,7 @@ export const getVideos = (token, payload) => {
 
 
 export const getVideoMetric = (token) => {
-  return axios.get('/admin/video/metrics', {
+  return axios.get('/admin/metrics', {
     headers: {
       Authorization: "Bearer " + token,
     },

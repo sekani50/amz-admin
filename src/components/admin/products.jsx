@@ -6,8 +6,10 @@ import { getProducts } from "../../Utils/api";
 import { useSelector } from "react-redux";
 import { LoaderIcon } from "lucide-react";
 import empty from "../../assets/png/emptyorder.png";
+import { useParams } from "react-router-dom";
 
 function AdminProducts() {
+  const {id} = useParams()
   const { token, currentUser } = useSelector((state) => state.user);
   const [page, setPage] = useState(1);
   const [data, setdata] = useState([]);
@@ -18,7 +20,7 @@ function AdminProducts() {
     const payload = {
       page: page,
       limit: 10,
-      userID: currentUser?._id,
+      userID:id,
     };
     async function fetchVideo() {
       setloading(true);
